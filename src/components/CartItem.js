@@ -7,7 +7,6 @@ import {
 import { useDispatch } from "react-redux";
 
 const CartItem = ({ id, img, title, price, amount }) => {
-  console.log(id);
   const dispatch = useDispatch();
   return (
     <article className="cart-item">

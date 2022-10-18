@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import cartItems from "../../cartItems";
+import axios from "axios";
+// import cartItems from "../../cartItems";
 //더미 데이터, 추후 db에서 fetching해 와야함
 //RDBMS사용, 유저와 일대다 관계로 설정, 로그아웃 시에도 저장되도록 설정
 
@@ -14,10 +15,14 @@ const initialState = {
 
 export const getCartItems = createAsyncThunk(
   "cart/getCartItems",
-  () => {
-    return fetch(url)
-      .then((resp) => resp.json())
-      .catch((err) => console.log(err));
+  async (_, thunkAPI) => {
+    try {
+      console.log(thunkAPI);
+      const resp = await axios(url);
+      return resp.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue("There was an error...!");
+    }
   }
 );
 
@@ -63,7 +68,7 @@ const cartSlice = createSlice({
       state.isLoading = true;
     },
     [getCartItems.fulfilled]: (state, action) => {
-      console.log(action);
+      // console.log(action);
       state.isLoading = false;
       state.cartItems = action.payload;
     },
